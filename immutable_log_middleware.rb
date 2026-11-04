@@ -105,7 +105,7 @@ class ImmutableLogMiddleware
   private
 
   # Reads what the app left in env (route, custom name, trail) here, on the request thread,
-  # and hands the background thread only plain strings — never env (copy, then spawn).
+  # and hands the background thread only plain strings, never env (copy, then spawn).
   def dispatch(facts, status, env, exception)
     event = build_event(facts, status, env, exception)
     Thread.new { post(event) }
@@ -170,7 +170,7 @@ class ImmutableLogMiddleware
   # Route template from the Rails router (7.1+): "/users/:id(.:format)" -> "/users/:id".
   # Rails 7.1/7.2 write it to env["action_dispatch.route_uri_pattern"]; Rails 8.1 only keeps the
   # route object in env["action_dispatch.route"] and computes the pattern on demand in
-  # Request#route_uri_pattern — so the public method is asked first, the env key is the fallback.
+  # Request#route_uri_pattern, so the public method is asked first; the env key is the fallback.
   # Missing on a 404 and on Rails < 7.1: the caller falls back to the concrete path.
   def route_template(env)
     pattern = nil
